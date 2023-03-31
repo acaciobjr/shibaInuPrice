@@ -17,7 +17,7 @@ preco_hoje = capitalizacao / supply
 for i in range(1, anos_futuros+1):
     supply -= queima_anual
     preco = capitalizacao / supply
-    print(f'O valor do ativo no ano {i} será de: {preco:.6f}')
+    print(f'O valor do ativo no ano {i} será de: {preco:.8f}')
 
     
 # Envia a solicitação HTTP para o site e obtém o conteúdo HTML da página
