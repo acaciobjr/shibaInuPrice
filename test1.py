@@ -1,32 +1,44 @@
-import requests
-from bs4 import BeautifulSoup
+def converter_valor(valor_str):
+    #Substituindo vírgulas por pontos e retirando espaço em branco
+    valor_str = valor_str.replace(',', '.').replace(' ', '')
+    try:
+        return float(valor_str)  #Tenta converter para float
+    except ValueError:
+        print("Formato inválido. Use um número válido.")
+        return None
 
 print("### Gerador de Preço SHIBA INU ###")
-capitalizacao = int(input('Qual o valor da capitalização em bilhões? '))
-supply = int(input('Qual o supply em questão em trilhões? '))
 
-capitalizacao *= 1000000000
-supply *= 1000000000000
+while True:
+    capitalizacao_str = input('Qual o valor da capitalização em bilhões? ')
+    capitalizacao = converter_valor(capitalizacao_str)
 
-queima_mensal = int(input('Qual a média de queima por mês? '))
-anos_futuros = int(input('Para quantos anos daqui a frente você deseja supor o preço? '))
+    supply_str = input('Qual o supply em questão em trilhões? ')
+    supply = converter_valor(supply_str)
+
+    if capitalizacao is not None and supply is not None:
+        capitalizacao *= 10 * 1e9  # Multiplica a capitalização por 10 e converte para unidades
+        supply *= 1e12 
+        break
+
+while True:
+    queima_mensal_str = input('Qual a média de queima por mês? ')
+    queima_mensal = converter_valor(queima_mensal_str)
+
+    if queima_mensal is not None:
+        break
+
+while True:
+    anos_futuros_str = input('Para quantos anos daqui a frente você deseja supor o preço? ')
+    anos_futuros = converter_valor(anos_futuros_str)
+
+    if anos_futuros is not None:
+        break 
 
 queima_anual = queima_mensal * 12
 preco_hoje = capitalizacao / supply
 
-for i in range(1, anos_futuros+1):
+for i in range(1, int(anos_futuros) + 1):
     supply -= queima_anual
     preco = capitalizacao / supply
     print(f'O valor do ativo no ano {i} será de: {preco:.8f}')
-
-    
-# Envia a solicitação HTTP para o site e obtém o conteúdo HTML da página
-#url = 'https://www.shibburn.com/'
-#response = requests.get(url)
-#soup = BeautifulSoup(response.text, 'html.parser')
-
-# Encontra a seção do supply na página e extrai o valor
-#supply_section = soup.find('span', {'class': 'supply-data'}).get_text().strip()
-#supply = float(supply_section.replace('T', '')) * 1000000000000
-
-#print(f'O valor do supply é: {supply:.2f}')
